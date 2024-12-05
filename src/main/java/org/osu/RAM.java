@@ -27,14 +27,14 @@ public class RAM {
         while (isRunning) {
             InstructionCommand c = instructionCommands.get(initialCommandIndex);
             switch (c.instruction) {
-                case READ -> read(c.value);
-                case WRITE -> write(c);
-                case LOAD -> load(c);
-                case STORE -> store(c);
-                case ADD -> add(c);
-                case SUB -> sub(c);
+                case READ -> read(c.value, c.operand);
+                case WRITE -> write(c, c.operand);
+                case LOAD -> load(c, c.operand);
+                case STORE -> store(c, c.operand);
+                case ADD -> add(c, c.operand);
+                case SUB -> sub(c, c.operand);
                 case MUL -> mul(c);
-                case DIV -> div(c);
+                case DIV -> div(c, c.operand);
                 case JMP -> jump(c.value);
                 case JZ -> jumpZero(c.value);
                 case JGTZ -> jumpGreaterThanZero(c.value);
@@ -62,64 +62,89 @@ public class RAM {
         outputTape.content.forEach(c -> System.out.print(c + " "));
     }
 
-    private void read(int value) {
-        register.set(value, inputTape.content.get(inputTape.head));
+    private void read(int value, String operand) {
+        if (operand == null) {
+            register.set(value, inputTape.content.get(inputTape.head));
+        }
         inputTape.head++;
     }
 
-    private void write(InstructionCommand instructionCommand) {
-        if (instructionCommand.operand == null)
+    private void write(InstructionCommand instructionCommand, String operand) {
+        if (operand == null) {
             outputTape.content.add(register.get(instructionCommand.value));
-        if (instructionCommand.operand != null && instructionCommand.operand.equals("="))
+        } else if (operand.equals("=")) {
             outputTape.content.add(instructionCommand.value);
-        if (instructionCommand.operand != null && instructionCommand.operand.equals("*"))
+        } else if (operand.equals("*")) {
             outputTape.content.add(register.get(register.get(0) + instructionCommand.value));
+        }
         outputTape.head++;
     }
 
-    private void load(InstructionCommand instructionCommand) {
-        if (instructionCommand.operand == null)
+    private void load(InstructionCommand instructionCommand, String operand) {
+        if (operand == null) {
             register.set(0, register.get(instructionCommand.value));
-        if (instructionCommand.operand != null && instructionCommand.operand.equals("="))
+        } else if (operand.equals("=")) {
             register.set(0, instructionCommand.value);
-        if (instructionCommand.operand != null && instructionCommand.operand.equals("*"))
-            register.set(0, register.get(register.get(0) + instructionCommand.value));
+        } else if (operand.equals("*")) {
+            register.set(0, inputTape.content.get(inputTape.head + instructionCommand.value));
+        }
     }
 
-    private void store(InstructionCommand instructionCommand) {
-        register.set(instructionCommand.value, register.get(0));
+    private void store(InstructionCommand instructionCommand, String operand) {
+        if (operand == null || operand.equals("")) {
+            register.set(instructionCommand.value, register.get(0));
+        } else if (operand.equals("*")) {
+            int address = register.get(instructionCommand.value + register.get(1));
+            register.set(address, register.get(0));
+        } else if (operand.equals("=")) {
+            register.set(instructionCommand.value, register.get(0));
+        } else {
+            throw new IllegalArgumentException("Invalid operand for STORE instruction");
+        }
     }
 
-    private void add(InstructionCommand instructionCommand) {
-        if (instructionCommand.operand == null)
+    private void add(InstructionCommand instructionCommand, String operand) {
+        if (operand == null) {
             register.set(0, register.get(0) + register.get(instructionCommand.value));
-        if (instructionCommand.operand != null && instructionCommand.operand.equals("="))
+        } else if (operand.equals("=")) {
             register.set(0, register.get(0) + instructionCommand.value);
-        if (instructionCommand.operand != null && instructionCommand.operand.equals("*"))
-            register.set(0, register.get(0) + register.get(register.get(0) + instructionCommand.value));
+        } else if (operand.equals("*")) {
+            register.set(0, register.get(0) + inputTape.content.get(register.get(0) + instructionCommand.value));
+        }
     }
 
-    private void sub(InstructionCommand instructionCommand) {
-        if (instructionCommand.operand == null)
+    private void sub(InstructionCommand instructionCommand, String operand) {
+        if (operand == null) {
             register.set(0, register.get(0) - register.get(instructionCommand.value));
+        } else if (operand.equals("*")) {
+            register.set(0, register.get(0) - inputTape.content.get(register.get(0) + instructionCommand.value));
+        }
     }
 
     private void mul(InstructionCommand instructionCommand) {
-        if (instructionCommand.operand == null)
+        if (instructionCommand.operand.equals("")) {
             register.set(0, register.get(0) * register.get(instructionCommand.value));
-        if (instructionCommand.operand != null && instructionCommand.operand.equals("="))
+        } else if (instructionCommand.operand.equals("=")) {
             register.set(0, register.get(0) * instructionCommand.value);
-        if (instructionCommand.operand != null && instructionCommand.operand.equals("*"))
-            register.set(0, register.get(0) * register.get(register.get(0) + instructionCommand.value));
+        } else if (instructionCommand.operand.equals("*")) {
+            int address = inputTape.head - 1; // Use the current tape position
+            if (address >= 0 && address < inputTape.content.size()) {
+                register.set(0, register.get(0) * inputTape.content.get(address));
+            } else {
+                throw new RuntimeException("Invalid indirect address: " + address);
+            }
+        }
     }
 
-    private void div(InstructionCommand instructionCommand) {
-        if (instructionCommand.operand == null)
+
+    private void div(InstructionCommand instructionCommand, String operand) {
+        if (operand == null) {
             register.set(0, register.get(0) / register.get(instructionCommand.value));
-        if (instructionCommand.operand != null && instructionCommand.operand.equals("="))
+        } else if (operand.equals("=")) {
             register.set(0, register.get(0) / instructionCommand.value);
-        if (instructionCommand.operand != null && instructionCommand.operand.equals("*"))
-            register.set(0, register.get(0) / register.get(register.get(0) + instructionCommand.value));
+        } else if (operand.equals("*")) {
+            register.set(0, register.get(0) / inputTape.content.get(register.get(0) + instructionCommand.value));
+        }
     }
 
     private void jump(int value) {
