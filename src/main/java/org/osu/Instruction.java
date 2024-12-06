@@ -1,6 +1,8 @@
 package org.osu;
 
-// TODO: delete unsused isnstructions
+/**
+ * DIV and JH are not implemented because they are not used in the tasks.
+ */
 public enum Instruction {
     READ,
     WRITE,
@@ -9,10 +11,8 @@ public enum Instruction {
     ADD,
     SUB,
     MUL,
-    DIV,
     JMP,
     JZ,
     JGTZ,
-    JH,
     HALT
 }

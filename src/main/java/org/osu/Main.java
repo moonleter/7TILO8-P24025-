@@ -14,12 +14,12 @@ public class Main {
         List<InstructionCommand> task1Multiply = Arrays.asList(
                 new InstructionCommand(Instruction.LOAD, "=", 1),
                 new InstructionCommand(Instruction.STORE, "=", 1),
-                new InstructionCommand(Instruction.READ, "*", 0),
-                new InstructionCommand(Instruction.MUL, "*", 0),
+                new InstructionCommand(Instruction.READ, "", 0),
+                new InstructionCommand(Instruction.MUL, "", 1),
                 new InstructionCommand(Instruction.JZ, "", 7),
                 new InstructionCommand(Instruction.STORE, "=", 1),
                 new InstructionCommand(Instruction.JMP, "=", 2),
-                new InstructionCommand(Instruction.WRITE, "*", 1),
+                new InstructionCommand(Instruction.WRITE, "", 1),
                 new InstructionCommand(Instruction.HALT, "=", 0)
         );
         Tape inputTape1 = new Tape(0, Arrays.asList(2, 3, 4, 0));
@@ -33,56 +33,46 @@ public class Main {
         // Task 2  {1^n 2^n 3^n | n >= 0}
         // TODO: fix
         List<InstructionCommand> task2 = Arrays.asList(
-                // 1^n
                 new InstructionCommand(Instruction.READ, "", 0),
-                new InstructionCommand(Instruction.JZ, "", 39),
-                new InstructionCommand(Instruction.STORE, "", 4),
-                new InstructionCommand(Instruction.LOAD, "", 1),
-                new InstructionCommand(Instruction.ADD, "=", 1),
-                new InstructionCommand(Instruction.STORE, "", 1),
-                new InstructionCommand(Instruction.READ, "", 0),
-                new InstructionCommand(Instruction.SUB, "", 4),
-                new InstructionCommand(Instruction.JGTZ, "", 11),
-                new InstructionCommand(Instruction.LOAD, "", 1),
-                new InstructionCommand(Instruction.JMP, "", 4),
-                // 2^n
-                new InstructionCommand(Instruction.LOAD, "=", 2),
-                new InstructionCommand(Instruction.STORE, "", 4),
+                new InstructionCommand(Instruction.JZ, "", 23),
+                new InstructionCommand(Instruction.SUB, "=", 1),
+                new InstructionCommand(Instruction.JZ, "", 8),
+                new InstructionCommand(Instruction.SUB, "=", 1),
+                new InstructionCommand(Instruction.JZ, "", 13),
+                new InstructionCommand(Instruction.SUB, "=", 1),
+                new InstructionCommand(Instruction.JZ, "", 18),
                 new InstructionCommand(Instruction.LOAD, "", 2),
                 new InstructionCommand(Instruction.ADD, "=", 1),
                 new InstructionCommand(Instruction.STORE, "", 2),
-                new InstructionCommand(Instruction.READ, "", 0),
-                new InstructionCommand(Instruction.SUB, "", 4),
-                new InstructionCommand(Instruction.JGTZ, "", 21),
-                new InstructionCommand(Instruction.LOAD, "", 2),
-                new InstructionCommand(Instruction.JMP, "", 14),
-                // 3^n
-                new InstructionCommand(Instruction.LOAD, "=", 3),
-                new InstructionCommand(Instruction.STORE, "", 4),
+                new InstructionCommand(Instruction.MUL, "=", 0),
+                new InstructionCommand(Instruction.JZ, "", 0),
                 new InstructionCommand(Instruction.LOAD, "", 3),
                 new InstructionCommand(Instruction.ADD, "=", 1),
                 new InstructionCommand(Instruction.STORE, "", 3),
-                new InstructionCommand(Instruction.READ, "", 0),
-                new InstructionCommand(Instruction.JZ, "", 31),
-                new InstructionCommand(Instruction.SUB, "", 4),
-                new InstructionCommand(Instruction.LOAD, "", 3),
-                new InstructionCommand(Instruction.JMP, "", 24),
-                new InstructionCommand(Instruction.LOAD, "", 1),
-                new InstructionCommand(Instruction.SUB, "", 2),
-                new InstructionCommand(Instruction.JZ, "", 35),
-                new InstructionCommand(Instruction.JMP, "", 41),
-                new InstructionCommand(Instruction.LOAD, "", 1),
+                new InstructionCommand(Instruction.MUL, "=", 0),
+                new InstructionCommand(Instruction.JZ, "", 0),
+                new InstructionCommand(Instruction.LOAD, "", 4),
+                new InstructionCommand(Instruction.ADD, "=", 1),
+                new InstructionCommand(Instruction.STORE, "", 4),
+                new InstructionCommand(Instruction.MUL, "=", 0),
+                new InstructionCommand(Instruction.JZ, "", 0),
+                new InstructionCommand(Instruction.LOAD, "", 2),
                 new InstructionCommand(Instruction.SUB, "", 3),
-                new InstructionCommand(Instruction.JZ, "", 39),
-                new InstructionCommand(Instruction.JMP, "", 41),
-                new InstructionCommand(Instruction.WRITE, "=", 1),
-                new InstructionCommand(Instruction.JMP, "", 42),
-                new InstructionCommand(Instruction.WRITE, "=", 0),
+                new InstructionCommand(Instruction.JGTZ, "", 33),
+                new InstructionCommand(Instruction.LOAD, "", 3),
+                new InstructionCommand(Instruction.SUB, "", 4),
+                new InstructionCommand(Instruction.JGTZ, "", 33),
+                new InstructionCommand(Instruction.MUL, "=", 0),
+                new InstructionCommand(Instruction.ADD, "=", 1),
+                new InstructionCommand(Instruction.WRITE, "", 0),
+                new InstructionCommand(Instruction.HALT, "", 0),
+                new InstructionCommand(Instruction.MUL, "=", 0),
+                new InstructionCommand(Instruction.WRITE, "", 0),
                 new InstructionCommand(Instruction.HALT, "", 0)
         );
-//        Tape inputTape2 = new Tape(0, Arrays.asList(1, 1, 2, 2, 3, 3, 0));
-//        int additionalRegistries2 = 4;
-//        RAM RAM2 = new RAM(inputTape2, task2, additionalRegistries2);
-//        RAM2.run();
+        Tape inputTape2 = new Tape(0, Arrays.asList(1, 1, 2, 2, 3, 3, 0));
+        int additionalRegistries2 = 10;
+        RAM RAM2 = new RAM(inputTape2, task2, additionalRegistries2);
+        RAM2.run();
     }
 }
