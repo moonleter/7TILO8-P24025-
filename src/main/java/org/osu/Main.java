@@ -31,7 +31,6 @@ public class Main {
         System.out.println("______________________________________________________________");
 
         // Task 2  {1^n 2^n 3^n | n >= 0}
-        // TODO: fix
         List<InstructionCommand> task2 = Arrays.asList(
                 new InstructionCommand(Instruction.READ, "", 0),
                 new InstructionCommand(Instruction.JZ, "", 23),
