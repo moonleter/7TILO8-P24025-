@@ -68,8 +68,7 @@ public class RAM {
         if (operand.isEmpty()) {
             register.set(0, value);
         } else {
-            int registerIndex = Integer.parseInt(operand);
-            register.set(registerIndex, value);
+            throw new IllegalArgumentException("Invalid operand for WRITE instruction: " + operand);
         }
 
         inputTape.head++;
@@ -148,7 +147,7 @@ public class RAM {
         } else if (instructionCommand.operand.equals("=")) {
             register.set(0, register.get(0) * instructionCommand.value);
         } else if (instructionCommand.operand.equals("*")) {
-            int address = inputTape.head - 1;
+            int address = inputTape.head - 1; // Use the current tape position
             if (address >= 0 && address < inputTape.content.size()) {
                 register.set(0, register.get(0) * inputTape.content.get(address));
             } else {

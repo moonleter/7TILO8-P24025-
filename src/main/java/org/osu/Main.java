@@ -57,10 +57,13 @@ public class Main {
                 new InstructionCommand(Instruction.JZ, "", 0),
                 new InstructionCommand(Instruction.LOAD, "", 2),
                 new InstructionCommand(Instruction.SUB, "", 3),
-                new InstructionCommand(Instruction.JGTZ, "", 33),
+                new InstructionCommand(Instruction.JGTZ, "", 36),
+                new InstructionCommand(Instruction.LOAD, "", 3),
+                new InstructionCommand(Instruction.SUB, "", 2),
+                new InstructionCommand(Instruction.JGTZ, "", 36),
                 new InstructionCommand(Instruction.LOAD, "", 3),
                 new InstructionCommand(Instruction.SUB, "", 4),
-                new InstructionCommand(Instruction.JGTZ, "", 33),
+                new InstructionCommand(Instruction.JGTZ, "", 36),
                 new InstructionCommand(Instruction.MUL, "=", 0),
                 new InstructionCommand(Instruction.ADD, "=", 1),
                 new InstructionCommand(Instruction.WRITE, "", 0),
@@ -69,7 +72,7 @@ public class Main {
                 new InstructionCommand(Instruction.WRITE, "", 0),
                 new InstructionCommand(Instruction.HALT, "", 0)
         );
-        Tape inputTape2 = new Tape(0, Arrays.asList(1, 1, 2, 2, 3, 3, 0));
+        Tape inputTape2 = new Tape(0, Arrays.asList(1, 1, 1, 2, 2, 2, 3, 3, 3, 0));
         int additionalRegistries2 = 10;
         RAM RAM2 = new RAM(inputTape2, task2, additionalRegistries2);
         RAM2.run();
